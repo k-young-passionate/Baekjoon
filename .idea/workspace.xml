@@ -1,7 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="bf4cd09e-81f3-4709-a584-d4fddf8c42a0" name="Default Changelist" comment="" />
+    <list default="true" id="bf4cd09e-81f3-4709-a584-d4fddf8c42a0" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/Backjoon#2667.c" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Baekjoon#1260.c" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Baekjoon#2178.c" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Baekjoon#2661.cpp" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/main.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/p16236.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/p17256.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/p17257.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/p17259.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/p1966.py" beforeDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -14,7 +25,11 @@
       </list>
     </option>
   </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
   <component name="ProjectId" id="1YERzd025QnrqAHMsbe3rxLNhOh" />
+  <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showExcludedFiles" value="true" />
