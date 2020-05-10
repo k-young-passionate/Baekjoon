@@ -8,8 +8,8 @@ def getinput():
         tmp = list(map(int, input().split()))
         mymap.append(tmp.copy())
 
-    chicken = []  # 치킨 집 list
-    home = []  # 가정 집 list
+    chicken = []
+    home = []
 
     for i in range(n):
         for j in range(n):
@@ -21,7 +21,7 @@ def getinput():
     return n, m, mymap, home, chicken
 
 
-def dist(src, chicken):  # 집에서 가장 가까운 치킨 집 거리
+def dist(src, chicken):
     distance = 0
     for i in chicken:
         tmp = abs(i[0]-src[0]) + abs(i[1]-src[1])
@@ -32,14 +32,14 @@ def dist(src, chicken):  # 집에서 가장 가까운 치킨 집 거리
     return distance
 
 
-def distall(home, chicken):  # 치킨 거리 찾기
-   total = 0
+def distall(home, chicken):
+    total = 0
     for i in home:
         total += dist(i, chicken)
     return total
 
 
-def simulation(n, m, home, chicken):  # 조건에 맞는 모든 경우 체크해 답 도출
+def simulation(n, m, home, chicken):
     c = combinations(chicken, m)
     score = 0
     for i in c:
