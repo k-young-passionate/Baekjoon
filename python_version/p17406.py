@@ -1,6 +1,6 @@
 from itertools import permutations
 
-def getinput():
+def getinput():  # 인풋 받기
     n, m, k = map(int, input().split())
 
     mat = []
@@ -14,7 +14,7 @@ def getinput():
     return n, m, k, mat, rot
 
 
-def rotateandmin(mat, rot):
+def rotateandmin(mat, rot):  # 하나씩 돌리고 행렬값 반환
     points = [rot[0]-rot[2]-1, rot[1]-rot[2]-1, rot[0]+rot[2]-1, rot[1]+rot[2]-1]
     for k in range(rot[2]):
         r1 = mat[points[0]+k][points[1]+k:(points[3]+1-k)].copy()
@@ -48,7 +48,7 @@ def debug(mat):
     print("================")
 
 
-def test(mat, rot):
+def test(mat, rot):  # 모든 회전 경우의 수를 만들고 이를 테스트 및 최솟값 출력
     cases = permutations(rot, len(rot))
 
     results = []
