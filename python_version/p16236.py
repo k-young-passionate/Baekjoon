@@ -1,121 +1,95 @@
-# cur
-# 0, 1: i, j  /  2: size  /  3: the number of eat  /  4: move  /  5: isBlocked
+from collections import deque
 
-
-
-def clear(n, space):
-    for i in range(n):
-        for j in range(n):
-            if space[i][j] >= 9:
-                space[i][j] -= 9
-    return space
-
-def eat(n, space, cur, addu, addl):
-    clear(n, space)
-    cur[0] = cur[0] + addu
-    cur[1] = cur[1] + addl
-    cur[3] += 1
-    if cur[3] == cur[2]:
-        cur[2] += 1
-    space[cur[0]][cur[1]] = 9
-    return space, cur
-
-def go(n, space, cur, addu, addl):
-    cur[0] = cur[0] + addu
-    cur[1] = cur[1] + addl
-    space[cur[0]][cur[1]] += 9
-    return space, cur
-
-def bfs(n, space, cur, queue):
-    cur[4] += 1
-    spacecmp = [space, space, space, space]
-    curcmp = [cur, cur, cur, cur]
-
-    try:
-        up = space[cur[0]-1][cur[1]]
-        if up <= cur[2]:
-            if up == cur[2] or up == 0:
-                spacecmp[0], curcmp[0] = go(n, space, cur, -1, 0)
-            else:
-                spacecmp[0], curcmp[0] = eat(n, space, cur, -1, 0)
-
-    except:
-        up = cur[2] + 1
-
-
-    try:
-        left = space[cur[0]][cur[1]-1]
-        if left <= cur[2]:
-            if left == cur[2] or left == 0:
-                spacecmp[1], curcmp[1] = go(n, space, cur, 0, -1)
-            else:
-                spacecmp[1], curcmp[1] = eat(n, space, cur, 0, -1)
-    except:
-        left = cur[2] + 1
-
-    try:
-        right = space[cur[0]][cur[1]+1]
-        if right <= cur[2]:
-            if right == cur[2] or right == 0:
-                spacecmp[2], curcmp[2] = go(n, space, cur, 0, 1)
-            else:
-                spacecmp[2], curcmp[2] = eat(n, space, cur, 0, 1)
-    except:
-        right = cur[2] + 1
-
-    try:
-        down = space[cur[0]+1][cur[1]]
-        if down <= cur[2]:
-            if down == cur[2] or down == 0:
-                spacecmp[3], curcmp[3] = go(n, space, cur, 1, 0)
-            else:
-                spacecmp[3], curcmp[3] = eat(n, space, cur, 1, 0)
-    except:
-        down = cur[2] + 1
-
-    if up > cur[2] and left > cur[2] and right > cur[2] and down > cur[2]:
-        cur[5] = False
-        return space, cur
-
-    maxmove, maxi = curcmp[0][4], 0
-    for i in range(4):
-        if curcmp[i][5] and maxmove > curcmp[i][4]:
-            maxmove = curcmp[i][4]
-            maxi = i
-
-    cur = curcmp[maxi]
-    space = spacecmp[maxi]
-    return space, cur
-
-
-
-
-def getindex(n, space):
-    ci, cj = 0, 0
-    for i in range(n):
-        for j in range(n):
-            if space[i][j] == 9:
-                ci, cj = i, j
-                break
-
-    return ci, cj
-
-
-def getinput():
+def getinput():  # input 받기, shark의 위치만 따로 저장
     n = int(input())
-    space = []
+    mymap = [list(map(int, input().split())) for _ in range(n)]
+
+
     for i in range(n):
-        tmp = input().split()
-        tmp = [ int(t) for t in tmp ]
-        space.append(tmp.copy())
-    return n, space
+        for j in range(n):
+            if mymap[i][j] == 9:
+                mymap[i][j] = 0
+                shark = (i, j)
 
-def result():
-    n, space = getinput()
 
-    ci, cj = getindex(n, space)
-    cur = [ci, cj, 2, 0, 0, True]
-    results = bfs(n, space, cur, [])
-    print(results)
-    print(results[1][3])
-    return 0
+    return n, mymap, shark
+
+
+def bfs(n, mymap, shark, size):  # 가장 가까운 먹이 탐색
+    visit = [[False for _ in range(n)] for _ in range(n)]
+
+    queue = deque()
+    time = 0
+    queue.append([shark, time])
+    visit[shark[0]][shark[1]] = True
+    result = []
+    resulttime = 0
+    while len(queue) > 0 :
+        front = queue.popleft()
+        q = front[0]
+        time = front[1]
+        candidates = [(q[0] - 1, q[1]), (q[0], q[1] - 1), (q[0], q[1] + 1), (q[0] + 1, q[1])]
+        for c in candidates:  # 4방향에 대해 탐색
+            if 0 <= c[0] < n and 0 <= c[1] < n:  # 범위 안에 있는 좌표만 탐색
+                if mymap[c[0]][c[1]] <= size and not visit[c[0]][c[1]]:  # 갈 수 있는 범위만 탐색
+                    if mymap[c[0]][c[1]] in [0, size]:  # 먹지 못하는 곳 탐색 시, queue에 추가
+                        queue.append([c, time + 1])
+                        visit[c[0]][c[1]] = True
+                    else:  # 먹이가 있으면 result 에 추가
+                        if len(result) == 0:  # result 가 비어있으면 최소 time 정해줌
+                            resulttime = time
+                        if resulttime < time:  # 기준 시간 초과 시, 결과 리턴
+                            result.sort(key=lambda x: x[0][0] * 100 + x[0][1])  # 위, 왼쪽 기준 우선순위
+                            r = result[0]  # 가장 우선순위 높은 것 출력
+                            c, time = r[0], r[1]
+                            mymap[c[0]][c[1]] = 0
+                            shark = c
+                            return True, time + 1, shark
+                        else:  # 기준 시간과 같을 경우 결과 값에 포함
+                            result.append([c, time])
+
+    if len(result) == 0:  # 결과 값이 없으면 False 반환
+        return False, 0, shark
+    else:  # 결과 값이 있으면 sorting 후, 우선순위 값 리턴
+        result.sort(key=lambda x: x[0][0] * 100 + x[0][1])
+        r = result[0]
+        c, time = r[0], r[1]
+        mymap[c[0]][c[1]] = 0
+        shark = c
+        return True, time + 1, shark
+
+
+def debug(n, mymap, shark, size, time):  # 디버그용 상어 위치 및 먹이 현황 그래프
+    print("=======",size,"======")
+    for i in range(n):
+        for j in range(n):
+            if (i, j) == shark:
+                print("9", end=" ")
+            else:
+                print(mymap[i][j], end=" ")
+        print()
+    print("========",time,"=======")
+
+
+def gettime(n, mymap, shark):  # 최소 시간 계산
+    size = 2  # 상어 크기
+    cnt = 0  # 먹은 수
+    totaltime = 0  # 총 걸린 시간
+    for i in range(n*n):  # 최대 n*n 번의 시행
+        result, time, shark = bfs(n, mymap, shark, size)  # 1회 bfs 순환
+        # debug(n, mymap, shark, size, time)
+        totaltime += time
+        if not result:  # 먹이를 못찾았으면 return
+            return totaltime
+        else:  # 먹이를 찾았으면
+            if cnt+1 == size:  # 몸집이 커지는 조건에서는 몸집 증가
+                size += 1
+                cnt = 0  # 초기화
+            else:  # 먹은 수 증가
+                cnt += 1
+    return totaltime
+
+
+if __name__ == "__main__":
+    n, mymap, shark = getinput()
+    print(gettime(n, mymap, shark))
